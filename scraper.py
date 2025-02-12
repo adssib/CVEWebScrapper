@@ -9,25 +9,24 @@ months = [
 ]
 
 out_dir = "out"
-try :
-    os.mkdir(out_dir)
-except: 
-    print("Folder already exsist")
+os.makedirs(out_dir, exist_ok=True)
 
 # x will represent the month number
-for x in range (2):
+for x in range (1, 13):
     # y is the number of pages we are going to loop through 
-    for y in range (2):
-        baseURL = f"https://www.cvedetails.com/vulnerability-list/year-2024/month-{x}/{months[x]}.html?page={y}&order=1"
+    for y in range (1, 3):
+        baseURL = f"https://www.cvedetails.com/vulnerability-list/year-2024/month-{x}/{months[x-1]}.html?page={y}&order=1"
         page = requests.get(baseURL)
-        
-        outputFileName = f"_cvedetails_{y}_{months[x]}_2024"
-        fileExtension = ".txt"
-        # os.mknod(fileName) 
+        print(f"Fetching data from: {baseURL}")
 
-        f = open(out_dir,outputFileName + fileExtension , "w")
-        f.write(page.text)
-f.close 
+        outputFileName = f"_cvedetails_page_{y}_{months[x-1]}_2024.txt"
+        # os.mknod(fileName) 
+        filePath = os.path.join(out_dir, outputFileName)
+
+        with open(filePath, "w", encoding="utf-8") as f:
+            f.write(page.text)
+
+        print(f"File created: {filePath}")
 
 
 
