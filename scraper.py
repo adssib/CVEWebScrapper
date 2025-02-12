@@ -18,7 +18,13 @@ for x in range (1, 13):
     # y is the number of pages we are going to loop through  till now we will limit it to 3 and thats it 
     for y in range (1, 3):
         baseURL = f"https://www.cvedetails.com/vulnerability-list/year-2024/month-{x}/{months[x-1]}.html?page={y}&order=1"
-        page = requests.get(baseURL)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        }
+        page = requests.get(baseURL, headers=headers)
+        if page.status_code != 200:
+            print(f"Failed to fetch {baseURL}, status code: {page.status_code}")
+            continue
 
         time.sleep(1) 
 
@@ -27,8 +33,15 @@ for x in range (1, 13):
         # outputFileName = f"_cvedetails_page_{y}_{months[x-1]}_2024.txt"
         # os.mknod(fileName) 
         # filePath = os.path.join(out_dir, outputFileName)
+        body = soup.find("body")
+        firstDiv = body.find("div", class_="container-xxl p-0 d-flex flex-column justify-content-start")
+        secondDiv = firstDiv.find("div", class_="container-xxl p-0 d-flex justify-content-start")
+        thirdDiv = secondDiv.find(id="contentdiv")
+        forthDiv = thirdDiv.find("div", class_="p-0 pe-2")
+        main = forthDiv.find("main")
+        resultsTableVueDiv = main.find(id="resultsTableVueDiv") 
 
-        cveSearchresults = soup.find(id="ResultsContainer") 
+        cveSearchresults = resultsTableVueDiv.find(id="searchresults") 
 
         if cveSearchresults:
             allDivCVE = cveSearchresults.find_all("div", class_="border-top py-3 px-2 hover-bg-light")
