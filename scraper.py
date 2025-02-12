@@ -36,7 +36,8 @@ for x in range (1, 13):
             for singleDivCVE in allDivCVE:
                 row = singleDivCVE.find("div", class_="row") 
                 colMd9 = row.find("div", class_="col-md-9")
-                h3 = colMd9.find("h3", class_="col-md-4 text-nowrap")
+                recondRow = colMd9.find("div", class_="row")
+                h3 = recondRow.find("h3", class_="col-md-4 text-nowrap")
                 link = h3.find("a", href=True) 
                 if link:
                     href = link['href']
