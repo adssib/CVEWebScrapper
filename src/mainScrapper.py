@@ -12,8 +12,8 @@ months = [
 ]
 
 allCVEs = [] 
-
-outFile = "allCVE.txt"
+year = 2024
+outFile = f"{year}_CVE.txt"
 
 # out_dir = "out"
 # os.makedirs(out_dir, exist_ok=True)
@@ -30,7 +30,7 @@ with open(outFile, "w") as f:
         pageNumber = 1
         firstPageResponse = None
         while True:
-            baseURL = f"https://www.cvedetails.com/vulnerability-list/year-2025/month-{x}/{months[x-1]}.html?page={pageNumber}&order=1"
+            baseURL = f"https://www.cvedetails.com/vulnerability-list/year-{year}/month-{x}/{months[x-1]}.html?page={pageNumber}&order=1"
             
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
