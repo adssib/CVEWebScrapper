@@ -1,0 +1,65 @@
+ISA relation Ship 
+
+NationalVDB is a CVE
+CircleCVE is a CVE
+
+Product, Software, Hardware
+
+Weak entity: A Vulnerability cannot exsist without a CVE related to it 
+
+an aggregation is something like Enrollement in the sense of Student and Course
+
+To connect both Data sources we are using Class Table Inheritance 
+
+Somehting like this: 
+
+CVE is a super type
+
+NationalVDB is a subclass with more specified attributes
+CircleCVE is too a subclass/subtype of CVE and have diffrent attributes 
+
+the shared attributes are in CVE table this way we can surely waste no place and not deal with nulls 
+
+but we pay the price of having complex join statements 
+
+By using the cve_id as the primary key in the CVE table and a foreign key in both the NationalCVE and CircleCVE tables, the relationship is established.
+
+To link the two data sources (National CVE and Circle CVE), we will utilize Class Table Inheritance (CTI). The idea is to create a common base table, CVE, that holds shared attributes like CVE descriptions, publish dates, and CVSS scores. Each source (National CVE and Circle CVE) will have its own table (NationalCVE and CircleCVE) that stores source-specific attributes. These source-specific tables will use the cve_id from the CVE base table as a foreign key, ensuring that both sources are linked to the same CVE record.
+Although the sources may use different identifiers (e.g., "CVE-2021-12345" for National CVE and "CIRCLE-2021-12345" for Circle CVE), the cve_id in the base CVE table serves as a common identifier to tie the data together. This structure allows us to retrieve information from both sources efficiently, even if they use different formats or identifiers, by performing joins based on the shared cve_id. The CVE table serves as the central repository for the common data, while the source-specific tables store the attributes unique to each source.
+
+
+
+Asserionts:  allows enforcing more complex integrity constraints. For instance, we might want to assert that a CVE cannot be deleted if it has entries in the NationalCVE or CircleCVE tables. If the CVE exists in either table, it cannot be deleted.
+
+Triggers help enforce referential integrity by ensuring that data in the child tables (NationalCVE, CircleCVE) cannot exist without the corresponding record in the parent table (CVE), and that data in child tables is deleted when the parent is deleted.
+
+
+
+
+Aggregation is sopmething like Enrollement in Student and Courses 
+
+we can use this example here 
+
+-- Severity Group Table
+CREATE TABLE Severity_Groups (
+    group_id INT PRIMARY KEY AUTO_INCREMENT,
+    severity_level VARCHAR(50),           -- 'Low', 'Medium', 'High'
+    description TEXT                      -- Severity level description
+);
+
+-- Association Table between CVEs and Severity Groups
+CREATE TABLE CVE_Severity_Association (
+    group_id INT,
+    cve_id VARCHAR(20),
+    PRIMARY KEY (group_id, cve_id),
+    FOREIGN KEY (group_id) REFERENCES Severity_Groups(group_id),
+    FOREIGN KEY (cve_id) REFERENCES CVEs(cve_id)
+);
+// I NEED TO CHECK THIS WITH THE TA 
+
+
+
+VIEWS:
+
+ Example of Row-Level Security (RLS) Implementation
+In some advanced cases, Row-Level Security (RLS) can be used to implement access control, where the rows a user sees are determined dynamically based on their role or identity. This is more complex and requires support from the database system (like PostgreSQL or SQL Server).
