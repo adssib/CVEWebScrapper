@@ -1,3 +1,5 @@
+## A CVE scrapper just because 
+
 python -m venv Venv
 
 venv\Scripts\activate.bat
